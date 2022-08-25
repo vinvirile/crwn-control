@@ -25,8 +25,13 @@ const cartQuantityUpdater = (cartItems, product, action) => {
 
   if (doesCartItemExist) {
     let operation
+    const { id } = doesCartItemExist
     if (action === 'decrement') {
       operation = -1
+
+      if (doesCartItemExist.quantity === 1) {
+        action = 'remove'
+      }
     } else {
       operation = 1
     }
@@ -36,14 +41,16 @@ const cartQuantityUpdater = (cartItems, product, action) => {
     }
 
     return cartItems.map(item => {
-      return (
-        item.id === product.id && {
-          ...item,
-          quantity: item.quantity + operation,
-        }
-      )
+      return item.id === product.id
+        ? {
+            ...item,
+            quantity: item.quantity + operation,
+          }
+        : { ...item, quantity: item.quantity }
     })
   }
+
+  return
 }
 
 export const CartContext = createContext({
@@ -92,6 +99,7 @@ export const CartProvider = ({ children }) => {
     setCartCount,
     updateCart,
     cartTotal,
+    setCartTotal,
   }
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>
