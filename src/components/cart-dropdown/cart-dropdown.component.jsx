@@ -1,6 +1,8 @@
+import { Link } from 'react-router-dom'
 import { useContext } from 'react'
 import { CartContext } from '../../contexts/cart.context'
 import Button from '../button/button.component'
+import CartItem from '../cart-item/cart-item.component'
 import './card-dropdown.styles.scss'
 
 const hideStyle = {
@@ -8,13 +10,18 @@ const hideStyle = {
 }
 
 const CartDropDown = () => {
-  const { isOpen } = useContext(CartContext)
+  const { isOpen, cartItems, setIsOpen } = useContext(CartContext)
 
   return (
     <div style={!isOpen ? hideStyle : {}} className='cart-dropdown-container'>
       <div className='cart-items'>
-        <Button>Go to Checkout</Button>
+        {cartItems.map(item => (
+          <CartItem key={item.id} cartItem={item} />
+        ))}
       </div>
+      <Link to='checkout'>
+        <Button onClick={() => setIsOpen(false)}>GO TO CHECKOUT</Button>
+      </Link>
     </div>
   )
 }
