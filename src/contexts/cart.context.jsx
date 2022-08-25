@@ -74,12 +74,14 @@ export const CartProvider = ({ children }) => {
 
   const addItemToCart = productToAdd => {
     setCartItems(() => addCartItem(cartItems, productToAdd))
-    setCartCount(cartCount + 1)
+    // setCartCount(cartCount + 1)
   }
 
   const updateCart = (product, action) => {
     setCartItems(() => cartQuantityUpdater(cartItems, product, action))
   }
+
+  // create a useeffect to make sure that the cart count always matches the cart we have in bag! Remove line 77
 
   useEffect(() => {
     setCartTotal(() => {
@@ -87,6 +89,14 @@ export const CartProvider = ({ children }) => {
         return previousValue + currentValue.price * currentValue.quantity
       }, 0)
     })
+  }, [cartItems])
+
+  useEffect(() => {
+    const cartTotalCount = cartItems.reduce((previousCount, currentValue) => {
+      return previousCount + currentValue.quantity
+    }, 0)
+
+    setCartCount(cartTotalCount)
   }, [cartItems])
 
   const value = {
