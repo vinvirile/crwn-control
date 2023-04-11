@@ -2,9 +2,19 @@
   box-sizing: border-box;
 }
 
+@font-face {
+  font-family: 'Open Sans Condensed';
+  src: url('./assets/fonts/open-sans-condensed/OpenSans-CondLight.ttf')
+      format('truetype'),
+    url('./assets/fonts/open-sans-condensed/OpenSans-CondLightItalic.ttf')
+      format('truetype'),
+    url('./assets/fonts/open-sans-condensed/OpenSans-CondBold.ttf')
+      format('truetype');
+}
+
 body {
   margin: 0;
-  font-family: 'Open Sans', sans-serif;
+  font-family: 'Open Sans Condensed', 'Open Sans', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
