@@ -24,6 +24,8 @@ export const CartContext = createContext({
   cartItems: [],
   addItemToCart: () => null,
   cartItemsCount: () => 0,
+  updateCart: () => null,
+  cartTotal: () => null,
 })
 
 export const CartProvider = ({ children }) => {
@@ -35,9 +37,40 @@ export const CartProvider = ({ children }) => {
   }
 
   const cartItemsCount = cartItems.reduce((accumulator, currentValue) => {
-    console.log(currentValue)
     return accumulator + currentValue.quantity
   }, 0)
+
+  const cartTotal = cartItems.reduce((accumulator, currentValue) => {
+    return accumulator + currentValue.quantity * currentValue.price
+  }, 0)
+
+  const updateCart = (action, productId) => {
+    const productIndex = cartItems.findIndex((item) => item.id === productId)
+
+    switch (action) {
+      case 'del':
+        if (productIndex === -1) return
+        setCartItems(
+          cartItems.filter((item) => {
+            return item.id !== productId
+          })
+        )
+        break
+
+      case 'dec':
+        if (productIndex === -1) return
+        if (cartItems[productIndex].quantity < 2) return
+        cartItems[productIndex].quantity--
+        setCartItems([...cartItems])
+        break
+
+      case 'inc':
+        if (productIndex === -1) return
+        cartItems[productIndex].quantity++
+        setCartItems([...cartItems])
+        break
+    }
+  }
 
   const value = {
     cartItems,
@@ -45,6 +78,8 @@ export const CartProvider = ({ children }) => {
     setIsCartOpen,
     addItemToCart,
     cartItemsCount,
+    updateCart,
+    cartTotal,
   }
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>
